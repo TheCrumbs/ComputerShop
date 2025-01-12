@@ -1,3 +1,4 @@
+// Part.java
 /**
  * Represents a computer part in the store.
  * A part has a name, quality, price, and failure rate.
@@ -19,6 +20,7 @@ public class Part {
     private String quality;
     private double price;
     private double failureRate;
+    private double purchasePrice; // Added purchase price
 
     // No-arg constructor
     public Part() {
@@ -26,6 +28,7 @@ public class Part {
         this.quality = QUALITY_FACTORY_NEW;
         this.price = 0.0;
         this.failureRate = FAILURE_FACTORY_NEW;
+        this.purchasePrice = 0.0;
     }
 
     // Multi-arg constructor
@@ -33,9 +36,24 @@ public class Part {
         this.name = name;
         setQuality(quality); // Ensures failure rate is set correctly
         this.price = price;
+         this.purchasePrice = price;
+    }
+        public Part(String name, String quality, double price, double purchasePrice) {
+        this.name = name;
+        setQuality(quality); // Ensures failure rate is set correctly
+        this.price = price;
+        this.purchasePrice = purchasePrice;
+    }
+    // Getters and Setters
+    public double getPurchasePrice() {
+        return purchasePrice;
     }
 
-    // Getters and Setters
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+
     public String getName() {
         return name;
     }
@@ -96,16 +114,7 @@ public class Part {
      * @return resale value
      */
     public double calculateResaleValue() {
-        switch (this.quality) {
-            case QUALITY_SLIGHTLY_DAMAGED:
-                return this.price * 0.95; // 5% off
-            case QUALITY_DAMAGED:
-                return this.price * 0.85; // 15% off
-            case QUALITY_VERY_DAMAGED:
-                return this.price * 0.5; // 50% off
-            default:
-                return this.price; // Factory New
-        }
+        return this.price;
     }
 
     @Override
@@ -115,6 +124,7 @@ public class Part {
                 ", quality='" + quality + '\'' +
                 ", price=" + price +
                 ", failureRate=" + failureRate +
+                 ", purchasePrice=" + purchasePrice +
                 '}';
     }
 }
