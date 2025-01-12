@@ -1,3 +1,4 @@
+// Store.java
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,12 @@ public class Store {
     private double funds;
     private double dailyExpenses;
     private List<Part> inventory;
+    private List<Part> storage; // New storage list
     private List<Supplier> suppliers;
     private int storeCapacity; // Max number of items the store can hold
     private int dailyVisitors;
     private double dailyIncome;
+    private int dailySales;
 
     // No-arg constructor
     public Store() {
@@ -26,10 +29,12 @@ public class Store {
         this.funds = 1000.0; // Starting funds
         this.dailyExpenses = BASE_RENT;
         this.inventory = new ArrayList<>();
+        this.storage = new ArrayList<>();
         this.suppliers = new ArrayList<>();
         this.storeCapacity = 50; // Default capacity
         this.dailyVisitors = 0;
         this.dailyIncome = 0.0;
+        this.dailySales = 0;
     }
 
     // Multi-arg constructor
@@ -38,10 +43,12 @@ public class Store {
         this.funds = initialFunds;
         this.dailyExpenses = BASE_RENT;
         this.inventory = new ArrayList<>();
+        this.storage = new ArrayList<>();
         this.suppliers = new ArrayList<>();
         this.storeCapacity = storeCapacity;
         this.dailyVisitors = 0;
         this.dailyIncome = 0.0;
+        this.dailySales = 0;
     }
 
     // Getters and Setters
@@ -73,6 +80,14 @@ public class Store {
         return inventory;
     }
 
+    public List<Part> getStorage() {
+        return storage;
+    }
+    public void setStorage(List<Part> storage){
+        this.storage = storage;
+    }
+
+
     public void setInventory(List<Part> inventory) {
         this.inventory = inventory;
     }
@@ -100,7 +115,8 @@ public class Store {
     public double getDailyIncome() {
         return dailyIncome;
     }
-
+    public int getDailySales(){return dailySales;}
+    public void setDailySales(int dailySales){this.dailySales = dailySales;}
     // Additional Beneficial Methods
     /**
      * Adds a part to the store's inventory if space is available.
@@ -116,6 +132,19 @@ public class Store {
         return false;
     }
 
+    public boolean addPartToStorage(Part part){
+        double basePrice = part.getPrice();
+         double purchasePrice = part.getPurchasePrice();
+         part.setPurchasePrice(purchasePrice);
+        part.setPrice(basePrice); // Set base price to what it was before for when its sold
+        if (storage.size() < storeCapacity) {
+            storage.add(part);
+            return true;
+        }
+        System.out.println("Storage full! Upgrade your store to add more space.");
+        return false;
+    }
+
     /**
      * Removes a part from the inventory by name.
      * @param partName The name of the part to remove.
@@ -125,20 +154,6 @@ public class Store {
         return inventory.removeIf(part -> part.getName().equalsIgnoreCase(partName));
     }
 
-    /**
-     * Purchases parts from a supplier.
-     * @param supplier The supplier to purchase from.
-     */
-    public void purchaseFromSupplier(Supplier supplier) {
-        List<Part> supplierParts = supplier.getAvailableParts();
-        for (Part part : supplierParts) {
-            if (funds >= part.getPrice() && addPartToInventory(part)) {
-                funds -= part.getPrice();
-            } else {
-                System.out.println("Insufficient funds or inventory full!");
-            }
-        }
-    }
 
     /**
      * Simulates daily operations such as sales, visitor count, and expenses.
@@ -146,26 +161,14 @@ public class Store {
     public void simulateDay() {
         // Generate random daily visitors
         dailyVisitors = (int) (Math.random() * 20 + 10); // Between 10 and 30 visitors
+        dailySales = 0;
 
-        // Calculate sales
-        dailyIncome = 0.0;
-        for (int i = 0; i < dailyVisitors; i++) {
-            if (!inventory.isEmpty()) {
-                Part part = inventory.remove((int) (Math.random() * inventory.size()));
-                dailyIncome += part.calculateResaleValue();
-            }
-        }
-
-        // Update funds and deduct expenses
-        funds += dailyIncome;
-        funds -= dailyExpenses;
 
         // Display daily report
         System.out.println("Daily Report:");
         System.out.println("Visitors: " + dailyVisitors);
-        System.out.println("Income: $" + dailyIncome);
-        System.out.println("Expenses: $" + dailyExpenses);
-        System.out.println("End of Day Funds: $" + funds);
+        System.out.println("Expenses: $" + String.format("%.2f", dailyExpenses));
+        System.out.println("End of Day Funds: $" + String.format("%.2f", funds));
     }
 
     /**
@@ -189,10 +192,12 @@ public class Store {
                 ", funds=" + funds +
                 ", dailyExpenses=" + dailyExpenses +
                 ", inventory=" + inventory +
+                ", storage=" + storage +
                 ", suppliers=" + suppliers +
                 ", storeCapacity=" + storeCapacity +
                 ", dailyVisitors=" + dailyVisitors +
                 ", dailyIncome=" + dailyIncome +
+                 ", dailySales=" + dailySales +
                 '}';
     }
 }

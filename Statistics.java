@@ -1,3 +1,4 @@
+// Statistics.java
 /**
  * Represents statistics and analytics for the store.
  * Tracks sales, income, expenses, and visitor metrics.
@@ -115,13 +116,13 @@ public class Statistics {
     public void displayStatistics() {
         System.out.println("Store Performance Summary:");
         System.out.println("Total Days Tracked: " + daysTracked);
-        System.out.println("Total Income: $" + totalIncome);
-        System.out.println("Total Expenses: $" + totalExpenses);
-        System.out.println("Net Profit: $" + calculateNetProfit());
+        System.out.println("Total Income: $" + String.format("%.2f", totalIncome));
+        System.out.println("Total Expenses: $" + String.format("%.2f", totalExpenses));
+        System.out.println("Net Profit: $" + String.format("%.2f", calculateNetProfit()));
         System.out.println("Total Visitors: " + totalVisitors);
         System.out.println("Total Sales: " + totalSales);
-        System.out.println("Average Daily Income: $" + calculateAverageDailyIncome());
-        System.out.println("Average Daily Visitors: " + calculateAverageDailyVisitors());
+        System.out.println("Average Daily Income: $" + String.format("%.2f",calculateAverageDailyIncome()));
+        System.out.println("Average Daily Visitors: " + String.format("%.2f", calculateAverageDailyVisitors()));
     }
 
     @Override

@@ -1,4 +1,6 @@
+// Customer.java
 import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * Represents a customer visiting the store.
@@ -57,28 +59,28 @@ public class Customer {
      */
     public Part browseAndPurchase(Store store) {
         if (store.getInventory().isEmpty()) {
-            System.out.println(name + " found no items in the store.");
+             System.out.println(name + " found no items in the store.");
             return null;
         }
 
         // Randomly decide if the customer wants to purchase
         Random random = new Random();
         if (random.nextDouble() < 0.5) { // 50% chance to attempt a purchase
-            for (Part part : store.getInventory()) {
+             for (Part part : new ArrayList<>(store.getInventory())) { // iterate over a copy to avoid concurrent modification
                 if (part.getPrice() <= budget) {
                     budget -= part.getPrice();
                     store.getInventory().remove(part); // Remove part from inventory
                     store.setFunds(store.getFunds() + part.getPrice()); // Add revenue to the store
+                    store.setDailySales(store.getDailySales() + 1);
                     madePurchase = true;
-                    System.out.println(name + " purchased " + part.getName() + " for $" + part.getPrice());
+                     System.out.println(name + " purchased " + part.getName() + " for $" + String.format("%.2f",part.getPrice()));
                     return part;
                 }
             }
             System.out.println(name + " couldn't afford any items in the store.");
         } else {
-            System.out.println(name + " browsed the store but didn't buy anything.");
+              System.out.println(name + " browsed the store but didn't buy anything.");
         }
-
         return null;
     }
 

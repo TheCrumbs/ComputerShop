@@ -1,3 +1,4 @@
+// TimeSimulation.java
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,20 +68,8 @@ public class TimeSimulation {
      */
     public void simulateDay() {
         System.out.println("\n--- Day " + currentDay + " ---");
-
-        // Handle customer visits
-        int visitorCount = (int) (Math.random() * 10 + 5); // Random number between 5 and 15
-        int salesCount = 0;
         double dailyIncome = 0.0;
-
-        for (int i = 0; i < visitorCount; i++) {
-            Customer customer = new Customer();
-            Part purchasedPart = customer.browseAndPurchase(store);
-            if (purchasedPart != null) {
-                salesCount++;
-                dailyIncome += purchasedPart.calculateResaleValue();
-            }
-        }
+        int salesCount = 0;
 
         // Handle order arrivals
         List<Order> arrivedOrders = new ArrayList<>();
@@ -89,14 +78,36 @@ public class TimeSimulation {
             if (order.hasArrived()) {
                 arrivedOrders.add(order);
                 System.out.println("Order " + order.getOrderId() + " has arrived!");
-                store.getInventory().addAll(order.getOrderedParts());
+                for(Part part : order.getOrderedParts()){
+                    store.addPartToStorage(part); //add parts to storage when order arrives
+                }
             }
         }
         pendingOrders.removeAll(arrivedOrders);
 
+
+        // Handle customer visits
+        int visitorCount = (int) (Math.random() * 10 + 5); // Random number between 5 and 15
+        List<Customer> customers = new ArrayList<>();
+        for (int i = 0; i < visitorCount; i++) {
+            customers.add(new Customer());
+        }
+        for(Customer customer : customers){
+            Part purchasedPart = customer.browseAndPurchase(store);
+            if(purchasedPart != null){
+                dailyIncome += purchasedPart.getPrice();
+                salesCount++;
+            }
+        }
+       
+
+
         // Update store and statistics
-        store.simulateDay(); // Handles expenses and updates funds
-        statistics.updateDailyStats(dailyIncome, store.getDailyExpenses(), visitorCount, salesCount);
+        double dailyExpenses = store.getDailyExpenses();
+        store.setFunds(store.getFunds() - dailyExpenses);
+        store.simulateDay();
+        statistics.updateDailyStats(dailyIncome, dailyExpenses, visitorCount, salesCount);
+
 
         // Increment day
         currentDay++;

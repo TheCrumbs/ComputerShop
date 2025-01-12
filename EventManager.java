@@ -1,3 +1,5 @@
+// EventManager.java
+
 import java.util.Random;
 
 /**
@@ -45,7 +47,7 @@ public class EventManager {
                 handleSupplierDelay();
                 break;
             case 3:
-                handleCustomerBoom();
+                handleTipJar();
                 break;
             case 4:
                 handleStoreTheft();
@@ -67,18 +69,20 @@ public class EventManager {
             part.setPrice(part.getPrice() * (1 - discount));
         }
 
-        System.out.println("Special Sale Event! All items are 20% off for today.");
+        System.out.println("Special Sale Event! You suddenly became less capitalist and made all items 20% off!");
     }
 
     /**
      * Deducts an unexpected expense from the store's funds.
      */
-    private void handleUnexpectedExpense() {
+   private void handleUnexpectedExpense() {
         Store store = timeSimulation.getStore();
+        Statistics statistics = timeSimulation.getStatistics();
         double expense = 200.0; // Fixed unexpected expense
 
         if (store.getFunds() >= expense) {
             store.setFunds(store.getFunds() - expense);
+            statistics.setTotalExpenses(statistics.getTotalExpenses() + expense);
             System.out.println("Unexpected Expense! You lost $200 due to maintenance costs.");
         } else {
             System.out.println("Unexpected Expense! But you don't have enough funds to cover it.");
@@ -96,18 +100,22 @@ public class EventManager {
 
         Random random = new Random();
         Order delayedOrder = timeSimulation.getPendingOrders()
-                                          .get(random.nextInt(timeSimulation.getPendingOrders().size()));
+                .get(random.nextInt(timeSimulation.getPendingOrders().size()));
         delayedOrder.setDaysToArrival(delayedOrder.getDaysToArrival() + 2);
 
         System.out.println("Supplier Delay Event! Order " + delayedOrder.getOrderId() + " is delayed by 2 days.");
     }
 
     /**
-     * Attracts a sudden influx of customers for the day.
+     * Adds revenue from 
      */
-    private void handleCustomerBoom() {
-        System.out.println("Customer Boom Event! More customers will visit today.");
-        timeSimulation.getStore().simulateDay(); // Triggers extra customer activity
+    private void handleTipJar() {
+       Store store = timeSimulation.getStore();
+        Statistics statistics = timeSimulation.getStatistics();
+        double income = 50.0; // Fixed tip jar income
+        System.out.println("You finally empty out the tip jar and find $50 inside!");
+        store.setFunds(store.getFunds() + income);
+        statistics.setTotalIncome(statistics.getTotalIncome() + income);
     }
 
     /**
@@ -125,7 +133,7 @@ public class EventManager {
         int stolenIndex = random.nextInt(store.getInventory().size());
         Part stolenPart = store.getInventory().remove(stolenIndex);
 
-        System.out.println("Store Theft Event! A " + stolenPart.getName() + " worth $" + stolenPart.getPrice() + " was stolen.");
+        System.out.println("Store Theft Event! A " + stolenPart.getName() + " worth $" + String.format("%.2f",stolenPart.getPrice()) + " was stolen.");
     }
 
     @Override
