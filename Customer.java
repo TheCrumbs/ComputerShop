@@ -1,3 +1,5 @@
+package shop;
+
 // Customer.java
 import java.util.Random;
 import java.util.ArrayList;
@@ -11,12 +13,14 @@ public class Customer {
     private String name;
     private double budget;
     private boolean madePurchase; // Indicates if the customer made a purchase during their visit
+    private String eyeColor;
 
     // No-arg constructor
     public Customer() {
         this.name = generateRandomName();
         this.budget = generateRandomBudget();
         this.madePurchase = false;
+        this.eyeColor = generateRandomEyeColor();
     }
 
     // Multi-arg constructor
@@ -24,6 +28,7 @@ public class Customer {
         this.name = name;
         this.budget = budget;
         this.madePurchase = false;
+        this.eyeColor = generateRandomEyeColor();
     }
 
     // Getters and Setters
@@ -49,6 +54,14 @@ public class Customer {
 
     public void setMadePurchase(boolean madePurchase) {
         this.madePurchase = madePurchase;
+    }
+    
+    public String getEyeColor() {
+    	return eyeColor;
+    }
+    
+    public void setEyeColor(String eyeColor) {
+    	this.eyeColor = eyeColor;
     }
 
     // Additional Beneficial Methods
@@ -114,6 +127,15 @@ public class Customer {
      */
     private double generateRandomBudget() {
         return 50 + (new Random().nextDouble() * 450); // Random value between 50 and 500
+    }
+    
+    /**
+     * Generates a random eye color for a customer
+     * @return A random color
+     */
+    private String generateRandomEyeColor() {
+    	String[] eyeColors = {"Black", "Blue", "Dark Brown", "Brown", "Green", "Blue Green"};
+    	return eyeColors[new Random().nextInt(eyeColors.length)];
     }
 
     @Override
