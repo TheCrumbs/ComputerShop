@@ -89,7 +89,22 @@ public class Customer {
      * @return A random name.
      */
     private String generateRandomName() {
-        String[] names = {"Alex", "Jordan", "Taylor", "Morgan", "Chris", "Casey", "Jamie", "Riley", "Sam", "Peyton"};
+        String[] names = {
+            "Aaliyah", "Aaron", "Abigail", "Adam", "Addison", "Adrian", "Adriana", "Aiden", "Alan", "Albert",
+            "Alex", "Alexa", "Alexander", "Alexis", "Alice", "Allison", "Alyssa", "Amanda", "Amber", "Amelia",
+            "Amy", "Andrea", "Andrew", "Angel", "Angela", "Anna", "Anthony", "Ariana", "Arianna", "Arthur",
+            "Ashley", "Aubrey", "Audrey", "Austin", "Ava", "Avery", "Bailey", "Benjamin", "Brandon", "Brenda",
+            "Brian", "Brianna", "Brittany", "Brooke", "Caleb", "Cameron", "Camila", "Carlos", "Caroline", "Casey",
+            "Cassandra", "Catherine", "Charles", "Charlotte", "Chelsea", "Chloe", "Christian", "Christopher", "Claire",
+            "Cody", "Colin", "Connor", "Cooper", "Daniel", "David", "Dawn", "Dean", "Deborah", "Delilah",
+            "Dennis", "Diana", "Dominic", "Donald", "Dylan", "Edward", "Elijah", "Elizabeth", "Ella", "Emily",
+            "Emma", "Eric", "Ethan", "Eva", "Evelyn", "Faith", "Felicity", "Finn", "Frances", "Gabriel",
+            "Gabriella", "Gavin", "George", "Grace", "Greg", "Hailey", "Hannah", "Harper", "Harry", "Heather",
+            "Helen", "Henry", "Holly", "Hunter", "Ian", "Isaac", "Isabella", "Isaiah", "Jack", "Jackson",
+            "Jacob", "Jade", "James", "Jamie", "Jane", "Jasmine", "Jason", "Jayden", "Jennifer", "Jeremiah",
+            "Jessica", "John", "Jonah", "Jonathan", "Jordan", "Joseph", "Joshua", "Joyce", "Julia", "Julian",
+            "Justin", "Ryan", "Aajinkya"
+          };
         return names[new Random().nextInt(names.length)];
     }
 
