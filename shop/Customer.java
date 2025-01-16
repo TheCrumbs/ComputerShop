@@ -1,0 +1,149 @@
+package shop;
+
+// Customer.java
+import java.util.Random;
+import java.util.ArrayList;
+
+/**
+ * Represents a customer visiting the store.
+ * Customers can browse and purchase parts.
+ */
+public class Customer {
+    // Attributes
+    private String name;
+    private double budget;
+    private boolean madePurchase; // Indicates if the customer made a purchase during their visit
+    private String eyeColor;
+
+    // No-arg constructor
+    public Customer() {
+        this.name = generateRandomName();
+        this.budget = generateRandomBudget();
+        this.madePurchase = false;
+        this.eyeColor = generateRandomEyeColor();
+    }
+
+    // Multi-arg constructor
+    public Customer(String name, double budget) {
+        this.name = name;
+        this.budget = budget;
+        this.madePurchase = false;
+        this.eyeColor = generateRandomEyeColor();
+    }
+
+    // Getters and Setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getBudget() {
+        return budget;
+    }
+
+    public void setBudget(double budget) {
+        this.budget = budget;
+    }
+
+    public boolean isMadePurchase() {
+        return madePurchase;
+    }
+
+    public void setMadePurchase(boolean madePurchase) {
+        this.madePurchase = madePurchase;
+    }
+    
+    public String getEyeColor() {
+    	return eyeColor;
+    }
+    
+    public void setEyeColor(String eyeColor) {
+    	this.eyeColor = eyeColor;
+    }
+
+    // Additional Beneficial Methods
+    /**
+     * Simulates the customer browsing the store's inventory and potentially making a purchase.
+     * @param store The store the customer is visiting.
+     * @return The purchased part, or null if no purchase was made.
+     */
+    public Part browseAndPurchase(Store store) {
+        if (store.getInventory().isEmpty()) {
+             System.out.println(name + " found no items in the store.");
+            return null;
+        }
+
+        // Randomly decide if the customer wants to purchase
+        Random random = new Random();
+        if (random.nextDouble() < 0.5) { // 50% chance to attempt a purchase
+             for (Part part : new ArrayList<>(store.getInventory())) { // iterate over a copy to avoid concurrent modification
+                if (part.getPrice() <= budget) {
+                    budget -= part.getPrice();
+                    store.getInventory().remove(part); // Remove part from inventory
+                    store.setFunds(store.getFunds() + part.getPrice()); // Add revenue to the store
+                    store.setDailySales(store.getDailySales() + 1);
+                    madePurchase = true;
+                     System.out.println(name + " purchased " + part.getName() + " for $" + String.format("%.2f",part.getPrice()));
+                    return part;
+                }
+            }
+            System.out.println(name + " couldn't afford any items in the store.");
+        } else {
+              System.out.println(name + " browsed the store but didn't buy anything.");
+        }
+        return null;
+    }
+
+    /**
+     * Generates a random name for a customer.
+     * @return A random name.
+     */
+    private String generateRandomName() {
+        String[] names = {
+            "Aaliyah", "Aaron", "Abigail", "Adam", "Addison", "Adrian", "Adriana", "Aiden", "Alan", "Albert",
+            "Alex", "Alexa", "Alexander", "Alexis", "Alice", "Allison", "Alyssa", "Amanda", "Amber", "Amelia",
+            "Amy", "Andrea", "Andrew", "Angel", "Angela", "Anna", "Anthony", "Ariana", "Arianna", "Arthur",
+            "Ashley", "Aubrey", "Audrey", "Austin", "Ava", "Avery", "Bailey", "Benjamin", "Brandon", "Brenda",
+            "Brian", "Brianna", "Brittany", "Brooke", "Caleb", "Cameron", "Camila", "Carlos", "Caroline", "Casey",
+            "Cassandra", "Catherine", "Charles", "Charlotte", "Chelsea", "Chloe", "Christian", "Christopher", "Claire",
+            "Cody", "Colin", "Connor", "Cooper", "Daniel", "David", "Dawn", "Dean", "Deborah", "Delilah",
+            "Dennis", "Diana", "Dominic", "Donald", "Dylan", "Edward", "Elijah", "Elizabeth", "Ella", "Emily",
+            "Emma", "Eric", "Ethan", "Eva", "Evelyn", "Faith", "Felicity", "Finn", "Frances", "Gabriel",
+            "Gabriella", "Gavin", "George", "Grace", "Greg", "Hailey", "Hannah", "Harper", "Harry", "Heather",
+            "Helen", "Henry", "Holly", "Hunter", "Ian", "Isaac", "Isabella", "Isaiah", "Jack", "Jackson",
+            "Jacob", "Jade", "James", "Jamie", "Jane", "Jasmine", "Jason", "Jayden", "Jennifer", "Jeremiah",
+            "Jessica", "John", "Jonah", "Jonathan", "Jordan", "Joseph", "Joshua", "Joyce", "Julia", "Julian",
+            "Justin", "Ryan", "Aajinkya"
+          };
+        return names[new Random().nextInt(names.length)];
+    }
+
+    /**
+     * Generates a random budget for a customer.
+     * @return A random budget between $50 and $500.
+     */
+    private double generateRandomBudget() {
+        return 50 + (new Random().nextDouble() * 450); // Random value between 50 and 500
+    }
+    
+    /**
+     * Generates a random eye color for a customer
+     * @return A random color
+     */
+    private String generateRandomEyeColor() {
+    	String[] eyeColors = {"Black", "Blue", "Dark Brown", "Brown", "Green", "Blue Green"};
+    	return eyeColors[new Random().nextInt(eyeColors.length)];
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "name='" + name + '\'' +
+                ", budget=" + budget +
+                ", madePurchase=" + madePurchase +
+                '}';
+    }
+}
