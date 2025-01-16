@@ -49,18 +49,20 @@ public class GameTest {
         while (true) {
             System.out.println("\nCurrent Funds: $" + String.format("%.2f", store.getFunds()));
             System.out.println("\n--- Main Menu ---");
-            System.out.println("1. View Store Status");
-            System.out.println("2. Manage Inventory");
-            System.out.println("3. Manage Storage");
-            System.out.println("4. Purchase from Supplier");
-            System.out.println("5. Set Resale Prices");
-            System.out.println("6. View Pending Orders");
-            System.out.println("7. Upgrade Store");
-            System.out.println("8. End Day");
-            System.out.println("9. Build a PC");
-            System.out.println("10. View Overall Statistics");
-            System.out.println("11. View Available Games");
-            System.out.println("0. Exit");
+            System.out.println("0. View Store Status");
+            System.out.println("1. Play Pong");
+            System.out.println("2. Play Blackjack");
+            System.out.println("3. Manage Inventory");
+            System.out.println("4. Manage Storage");
+            System.out.println("5. Purchase from Supplier");
+            System.out.println("6. Set Resale Prices");
+            System.out.println("7. View Pending Orders");
+            System.out.println("8. Upgrade Store");
+            System.out.println("9. End Day");
+            System.out.println("10. Build a PC");
+            System.out.println("11. View Overall Statistics");
+            System.out.println("12. View Available Games");
+            System.out.println("13. Exit");
             System.out.print("Enter your choice: ");
 
             int choice = -1; // Initialize with an invalid value
@@ -74,42 +76,49 @@ public class GameTest {
             scanner.nextLine(); // Consume the newline
 
             switch (choice) {
+            	case 0:
+            		viewStoreStatus(store);
+            		break;
                 case 1:
-                	viewStoreStatus(store);
+                	playPongGame(scanner);
                     break;
                 case 2:
-                    manageInventory(store, scanner);
+                	BlackJackGame(scanner);
                     break;
                 case 3:
-                    manageStorage(store, scanner);
+                    manageInventory(store, scanner);
                     break;
                 case 4:
-                    purchaseFromSupplier(timeSimulation, scanner, store);
+                    manageStorage(store, scanner);
                     break;
                 case 5:
-                    setResalePrices(store, scanner);
+                    purchaseFromSupplier(timeSimulation, scanner, store);
                     break;
                 case 6:
-                    viewPendingOrders(timeSimulation);
+                    setResalePrices(store, scanner);
                     break;
                 case 7:
-                    store.upgradeStore();
+                    viewPendingOrders(timeSimulation);
                     break;
                 case 8:
+                    store.upgradeStore();
+                    break;
+                case 9:
                     eventManager.triggerRandomEvent();
                     timeSimulation.simulateDay();
                     break;
-                case 9:
+                case 10:
                     buildComputer(store, scanner);
                     break;
-                case 10:
+                case 11:
                     statistics.displayStatistics();
                     break;
-                case 11:
+                case 12:
                     viewAvailableGames();
                     break;
-                case 0:
+                case 13:
                     System.out.println("Exiting the game. Thank you for playing!");
+                    scanner.close();
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -123,7 +132,7 @@ public class GameTest {
         //Example parts
         CPU cpu1 = new CPU(Part.QUALITY_FACTORY_NEW, 100.0, 50.0, "Intel", "i5 12600k", 12, 6, 3.8, 16);
         GPU gpu1 = new GPU(Part.QUALITY_FACTORY_NEW, 200.0, 100.0, "Nvidia", "RTX 2060", 6, 1.5);
-        RAM ram1 = new RAM(Part.QUALITY_FACTORY_NEW, 80.0, 40.0, "Corsair", 16, 3200, "DDR4");
+        RAM ram1 = new RAM(Part.QUALITY_FACTORY_NEW, 80.0, 40.0, "Corsair", 1, 3200, "DDR4");
         Motherboard mb1 = new Motherboard(Part.QUALITY_FACTORY_NEW, 150.0, 75.0, "MSI", "LGA 1700", "ATX", 4, "Z790", "PCIe 5.0");
         SSD ssd1 = new SSD(Part.QUALITY_FACTORY_NEW, 90.0, 45.0, "Samsung", 500, "NVMe", 3500, 3000);
         HDD hdd1 = new HDD(Part.QUALITY_FACTORY_NEW, 70.0, 35.0, "Seagate", 1000, 7200, "HDD");
@@ -138,7 +147,7 @@ public class GameTest {
 
         //Example Games
         gameList.add(new Game("Pong", cpu1, gpu1, ram1, mb1, null, null, true, true, true, true));
-        gameList.add(new Game("Strategy Game", cpu2, gpu2, ram2, mb2, ssd2, null, true, true, true, true));
+        gameList.add(new Game("Blackjack", cpu2, gpu2, ram2, mb2, ssd2, null, true, true, true, true));
 
 
         return gameList;
@@ -473,6 +482,59 @@ public class GameTest {
             }
         }
     }
+    
+    
+     private static void BlackJackGame(Scanner scanner){
+    	 Deck deck = new Deck();
+	        Player player = new Player();
+	        Player dealer = new Player();
+
+	        player.addCard(deck.dealCard());
+	        dealer.addCard(deck.dealCard());
+	        player.addCard(deck.dealCard());
+	        dealer.addCard(deck.dealCard());
+
+	        System.out.println("Your hand: " + player.getHand());
+	        System.out.println("Dealer's hand: " + dealer.getHand().get(0) + " and [hidden]");
+
+	        while (true) {
+	            System.out.println("Your hand value: " + player.calculateHandValue());
+	            System.out.println("Do you want to (1) Hit or (2) Stand?");
+	            int choice = scanner.nextInt();
+	            if (choice == 1) {
+	                player.addCard(deck.dealCard());
+	                System.out.println("Your hand: " + player.getHand());
+	                if (player.calculateHandValue() > 21) {
+	                    System.out.println("You bust! Dealer wins.");
+	                    return;
+	                }
+	            } else {
+	                break;
+	            }
+	        }
+
+	        System.out.println("Dealer's hand: " + dealer.getHand());
+	        while (dealer.calculateHandValue() < 17) {
+	            dealer.addCard(deck.dealCard());
+	            System.out.println("Dealer's hand: " + dealer.getHand());
+	        }
+
+	        int playerValue = player.calculateHandValue();
+	        int dealerValue = dealer.calculateHandValue();
+	        System.out.println("Your hand value: " + playerValue);
+	        System.out.println("Dealer's hand value: " + dealerValue);
+
+	        if (dealerValue > 21 || playerValue > dealerValue) {
+	            System.out.println("You win!");
+	        } else if (playerValue < dealerValue) {
+	            System.out.println("Dealer wins!");
+	        } else {
+	            System.out.println("It's a tie!");
+	        }
+	    }
+    
+    
+    
  private static void viewStoreStatus(Store store) {
         System.out.println("\n--- Store Status ---");
         System.out.println("Store Name: " + store.getStoreName());
