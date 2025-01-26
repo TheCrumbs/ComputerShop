@@ -6,9 +6,10 @@ public class Case extends Part {
     private String brand;
     private String formFactor;
     private String color;
-       private int driveBays;
+    private int driveBays;
 
-    public Case(String quality, double price, double purchasePrice, String brand, String formFactor, String color, int driveBays) {
+    public Case(String quality, double price, double purchasePrice, 
+               String brand, String formFactor, String color, int driveBays) {
         super("Case", quality, price, purchasePrice);
         this.brand = brand;
         this.formFactor = formFactor;
