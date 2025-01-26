@@ -19,8 +19,6 @@ public class Computer {
     private Wiring wiring;
     private List<Part> parts;
 
-
-    // Constructor to build a computer
     public Computer() {
         this.parts = new ArrayList<>();
     }
@@ -30,7 +28,6 @@ public class Computer {
         extractParts(parts);
     }
 
-    // Getters and Setters for each part
     public CPU getCpu() {
         return cpu;
     }
@@ -39,7 +36,6 @@ public class Computer {
         removePart(this.cpu);
         this.cpu = cpu;
         addPart(cpu);
-
     }
 
     public GPU getGpu() {
@@ -50,7 +46,6 @@ public class Computer {
         removePart(this.gpu);
         this.gpu = gpu;
         addPart(gpu);
-
     }
 
     public RAM getRam() {
@@ -61,7 +56,6 @@ public class Computer {
         removePart(this.ram);
         this.ram = ram;
         addPart(ram);
-
     }
 
     public Motherboard getMotherboard() {
@@ -72,7 +66,6 @@ public class Computer {
         removePart(this.motherboard);
         this.motherboard = motherboard;
         addPart(motherboard);
-
     }
 
     public SSD getSsd() {
@@ -113,7 +106,6 @@ public class Computer {
         removePart(this.fans);
         this.fans = fans;
         addPart(fans);
-
     }
 
     public Monitor getMonitor() {
@@ -156,7 +148,6 @@ public class Computer {
         addPart(wiring);
     }
 
-
     public List<Part> getParts() {
         return parts;
     }
@@ -169,12 +160,12 @@ public class Computer {
     private void addPart(Part part) {
         this.parts.add(part);
     }
+
     private void removePart(Part part) {
-        if(part != null){
+        if (part != null) {
             this.parts.remove(part);
         }
     }
-
 
     private void extractParts(List<Part> parts) {
         for (Part part : parts) {
@@ -206,10 +197,9 @@ public class Computer {
         }
     }
 
-
     public boolean meetsGameRequirements(Game game) {
         StringBuilder missingComponents = new StringBuilder();
-        
+
         if (game.getRequiredCPU() != null && (cpu == null || !isBetterOrEqual(cpu, game.getRequiredCPU()))) {
             missingComponents.append(" - CPU does not meet requirements\n");
         }
@@ -222,8 +212,7 @@ public class Computer {
         if (game.getRequiredMotherboard() != null && (motherboard == null || !isBetterOrEqual(motherboard, game.getRequiredMotherboard()))) {
             missingComponents.append(" - Motherboard does not meet requirements\n");
         }
-        
-        // Storage requirements check
+
         if (game.getRequiredSsd() != null) {
             if (ssd == null || !isBetterOrEqual(ssd, game.getRequiredSsd())) {
                 missingComponents.append(" - SSD does not meet requirements\n");
@@ -235,7 +224,6 @@ public class Computer {
             }
         }
 
-        // Peripheral checks
         if (game.isHasMonitor() && monitor == null) {
             missingComponents.append(" - Monitor is required\n");
         }
@@ -257,39 +245,40 @@ public class Computer {
     }
 
     private boolean isBetterOrEqual(Part currentPart, Part requiredPart) {
-         if (currentPart instanceof CPU && requiredPart instanceof CPU) {
+        if (currentPart instanceof CPU && requiredPart instanceof CPU) {
             CPU currentCPU = (CPU) currentPart;
             CPU requiredCPU = (CPU) requiredPart;
-
-           return currentCPU.getCores() >= requiredCPU.getCores() && currentCPU.getClockSpeed() >= requiredCPU.getClockSpeed() && currentCPU.getCacheSize() >= requiredCPU.getCacheSize();
-        } else if(currentPart instanceof GPU && requiredPart instanceof GPU){
+            return currentCPU.getCores() >= requiredCPU.getCores() 
+                    && currentCPU.getClockSpeed() >= requiredCPU.getClockSpeed() 
+                    && currentCPU.getCacheSize() >= requiredCPU.getCacheSize();
+        } else if (currentPart instanceof GPU && requiredPart instanceof GPU) {
             GPU currentGPU = (GPU) currentPart;
             GPU requiredGPU = (GPU) requiredPart;
-            return currentGPU.getMemory() >= requiredGPU.getMemory() && currentGPU.getClockSpeed() >= requiredGPU.getClockSpeed();
-
-        } else if(currentPart instanceof RAM && requiredPart instanceof RAM){
+            return currentGPU.getMemory() >= requiredGPU.getMemory() 
+                    && currentGPU.getClockSpeed() >= requiredGPU.getClockSpeed();
+        } else if (currentPart instanceof RAM && requiredPart instanceof RAM) {
             RAM currentRAM = (RAM) currentPart;
             RAM requiredRAM = (RAM) requiredPart;
-            return currentRAM.getCapacity() >= requiredRAM.getCapacity() && currentRAM.getSpeed() >= requiredRAM.getSpeed();
-        }  else if(currentPart instanceof Motherboard && requiredPart instanceof Motherboard){
+            return currentRAM.getCapacity() >= requiredRAM.getCapacity() 
+                    && currentRAM.getSpeed() >= requiredRAM.getSpeed();
+        } else if (currentPart instanceof Motherboard && requiredPart instanceof Motherboard) {
             Motherboard currentMB = (Motherboard) currentPart;
-             Motherboard requiredMB = (Motherboard) requiredPart;
-
+            Motherboard requiredMB = (Motherboard) requiredPart;
             return currentMB.getRamSlots() >= requiredMB.getRamSlots();
-        } else if(currentPart instanceof SSD && requiredPart instanceof SSD){
-             SSD currentSSD = (SSD) currentPart;
-               SSD requiredSSD = (SSD) requiredPart;
-           return currentSSD.getCapacity() >= requiredSSD.getCapacity() && currentSSD.getReadSpeed() >= requiredSSD.getReadSpeed() && currentSSD.getWriteSpeed() >= requiredSSD.getWriteSpeed();
-
-        } else if (currentPart instanceof HDD && requiredPart instanceof HDD){
-             HDD currentHDD = (HDD) currentPart;
+        } else if (currentPart instanceof SSD && requiredPart instanceof SSD) {
+            SSD currentSSD = (SSD) currentPart;
+            SSD requiredSSD = (SSD) requiredPart;
+            return currentSSD.getCapacity() >= requiredSSD.getCapacity() 
+                    && currentSSD.getReadSpeed() >= requiredSSD.getReadSpeed() 
+                    && currentSSD.getWriteSpeed() >= requiredSSD.getWriteSpeed();
+        } else if (currentPart instanceof HDD && requiredPart instanceof HDD) {
+            HDD currentHDD = (HDD) currentPart;
             HDD requiredHDD = (HDD) requiredPart;
-           return currentHDD.getCapacity() >= requiredHDD.getCapacity() && currentHDD.getRpm() >= requiredHDD.getRpm();
+            return currentHDD.getCapacity() >= requiredHDD.getCapacity() 
+                    && currentHDD.getRpm() >= requiredHDD.getRpm();
         }
-
-      return false;
+        return false;
     }
-
 
     @Override
     public String toString() {
@@ -300,14 +289,12 @@ public class Computer {
         output += (motherboard != null) ? "Motherboard: " + motherboard.getBrand() + " " + motherboard.getSocketType() + "\n" : "No Motherboard\n";
         output += (ssd != null) ? "SSD: " + ssd.getBrand() + " " + ssd.getCapacity() + "GB (" + ssd.getType() + ")\n" : "No SSD\n";
         output += (hdd != null) ? "HDD: " + hdd.getBrand() + " " + hdd.getCapacity() + "GB (" + hdd.getType() + ")\n" : "No HDD\n";
-        output += (casePart != null) ? "Case: " + casePart.getBrand() + " " + casePart.getFormFactor() + "\n": "No Case\n";
-        output += (fans != null) ? "Fans: " + fans.getBrand() + " " + fans.getSize() + "mm\n": "No Fans\n";
-        output += (monitor != null) ? "Monitor: " + monitor.getBrand() + " " + monitor.getSize() + "inch\n": "No Monitor\n";
-        output += (keyboard != null) ? "Keyboard: " + keyboard.getBrand() + " " + keyboard.getLayout() + "\n": "No Keyboard\n";
-        output += (mouse != null) ? "Mouse: " + mouse.getBrand() + " " + mouse.getSensorType() + "\n": "No Mouse\n";
-        output += (wiring != null) ? "Wiring: " + wiring.getMaterial() + " Wiring\n": "No Wiring\n";
-
-
+        output += (casePart != null) ? "Case: " + casePart.getBrand() + " " + casePart.getFormFactor() + "\n" : "No Case\n";
+        output += (fans != null) ? "Fans: " + fans.getBrand() + " " + fans.getSize() + "mm\n" : "No Fans\n";
+        output += (monitor != null) ? "Monitor: " + monitor.getBrand() + " " + monitor.getSize() + "inch\n" : "No Monitor\n";
+        output += (keyboard != null) ? "Keyboard: " + keyboard.getBrand() + " " + keyboard.getLayout() + "\n" : "No Keyboard\n";
+        output += (mouse != null) ? "Mouse: " + mouse.getBrand() + " " + mouse.getSensorType() + "\n" : "No Mouse\n";
+        output += (wiring != null) ? "Wiring: " + wiring.getMaterial() + " Wiring\n" : "No Wiring\n";
         return output;
     }
 }
