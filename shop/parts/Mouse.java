@@ -28,33 +28,33 @@ public class Mouse extends Part {
         return dpi;
     }
 
-      public boolean hasWireless(){
-      return hasWireless;
-      }
-     @Override
-     public double calculateResaleValue(){
-       double baseResaleValue = super.calculateResaleValue();
-         double qualityMultiplier = 1.0;
-            switch (getQuality()) {
-                case QUALITY_FACTORY_NEW:
-                    qualityMultiplier = 1.2;
-                    break;
-                case QUALITY_SLIGHTLY_DAMAGED:
-                    qualityMultiplier = 0.8;
-                    break;
-                  case QUALITY_DAMAGED:
-                    qualityMultiplier = 0.6;
-                    break;
-                case QUALITY_VERY_DAMAGED:
-                    qualityMultiplier = 0.4;
-                    break;
-             }
-            double wirelessMultiplier = hasWireless ? 1.1 : 1.0;
-            double dpiPerformance = (double) dpi / 3200;
+    public boolean hasWireless() {
+        return hasWireless;
+    }
 
-            return baseResaleValue * qualityMultiplier * wirelessMultiplier + baseResaleValue * dpiPerformance;
-     }
+    @Override
+    public double calculateResaleValue() {
+        double baseResaleValue = super.calculateResaleValue();
+        double qualityMultiplier = 1.0;
+        switch (getQuality()) {
+            case QUALITY_FACTORY_NEW:
+                qualityMultiplier = 1.2;
+                break;
+            case QUALITY_SLIGHTLY_DAMAGED:
+                qualityMultiplier = 0.8;
+                break;
+            case QUALITY_DAMAGED:
+                qualityMultiplier = 0.6;
+                break;
+            case QUALITY_VERY_DAMAGED:
+                qualityMultiplier = 0.4;
+                break;
+        }
+        double wirelessMultiplier = hasWireless ? 1.1 : 1.0;
+        double dpiPerformance = (double) dpi / 3200;
 
+        return baseResaleValue * qualityMultiplier * wirelessMultiplier + baseResaleValue * dpiPerformance;
+    }
 
     @Override
     public String toString() {
@@ -62,7 +62,7 @@ public class Mouse extends Part {
                 "brand='" + brand + '\'' +
                 ", sensorType='" + sensorType + '\'' +
                 ", dpi=" + dpi +
-                  ", hasWireless=" + hasWireless +
+                ", hasWireless=" + hasWireless +
                 "} " + super.toString();
     }
 }
