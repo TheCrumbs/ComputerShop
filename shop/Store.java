@@ -13,6 +13,8 @@ public class Store {
     public static final double BASE_RENT = 500.0; // Initial building rent
     public static final double UPGRADE_COST = 1000.0; // Cost to upgrade the building
 
+    private List<Game> unlockedGames = new ArrayList<>();
+
     // Attributes
     private String storeName;
     private double funds;
@@ -185,6 +187,17 @@ public class Store {
         } else {
             System.out.println("Not enough funds to upgrade the store.");
         }
+    }
+
+    public void unlockGame(Game game) {
+        if (!unlockedGames.contains(game)) {
+            unlockedGames.add(game);
+            System.out.println("New game unlocked: " + game.getName() + "!");
+        }
+    }
+
+    public List<Game> getUnlockedGames() {
+        return unlockedGames;
     }
 
     @Override
