@@ -208,47 +208,54 @@ public class Computer {
 
 
     public boolean meetsGameRequirements(Game game) {
+        StringBuilder missingComponents = new StringBuilder();
+        
         if (game.getRequiredCPU() != null && (cpu == null || !isBetterOrEqual(cpu, game.getRequiredCPU()))) {
-            return false;
+            missingComponents.append(" - CPU does not meet requirements\n");
         }
         if (game.getRequiredGPU() != null && (gpu == null || !isBetterOrEqual(gpu, game.getRequiredGPU()))) {
-            return false;
+            missingComponents.append(" - GPU does not meet requirements\n");
         }
-
         if (game.getRequiredRam() != null && (ram == null || !isBetterOrEqual(ram, game.getRequiredRam()))) {
-            return false;
+            missingComponents.append(" - RAM does not meet requirements\n");
         }
-
-         if(game.getRequiredMotherboard() != null && (motherboard == null || !isBetterOrEqual(motherboard, game.getRequiredMotherboard()))){
-             return false;
-         }
-
-        if (game.getRequiredSsd() != null && (ssd == null || !isBetterOrEqual(ssd, game.getRequiredSsd()))){
-            if(game.getRequiredHdd() != null && (hdd == null || !isBetterOrEqual(hdd, game.getRequiredHdd()))){
-                return false;
-            } else if (hdd == null) {
-               return false;
+        if (game.getRequiredMotherboard() != null && (motherboard == null || !isBetterOrEqual(motherboard, game.getRequiredMotherboard()))) {
+            missingComponents.append(" - Motherboard does not meet requirements\n");
+        }
+        
+        // Storage requirements check
+        if (game.getRequiredSsd() != null) {
+            if (ssd == null || !isBetterOrEqual(ssd, game.getRequiredSsd())) {
+                missingComponents.append(" - SSD does not meet requirements\n");
             }
-        } else if(game.getRequiredHdd() != null && (hdd == null || !isBetterOrEqual(hdd, game.getRequiredHdd()))){
-           return false;
-      }
+        }
+        if (game.getRequiredHdd() != null) {
+            if (hdd == null || !isBetterOrEqual(hdd, game.getRequiredHdd())) {
+                missingComponents.append(" - HDD does not meet requirements\n");
+            }
+        }
 
-        if(game.isHasMonitor() && monitor == null){
+        // Peripheral checks
+        if (game.isHasMonitor() && monitor == null) {
+            missingComponents.append(" - Monitor is required\n");
+        }
+        if (game.isHasKeyboard() && keyboard == null) {
+            missingComponents.append(" - Keyboard is required\n");
+        }
+        if (game.isHasMouse() && mouse == null) {
+            missingComponents.append(" - Mouse is required\n");
+        }
+        if (game.isHasWiring() && wiring == null) {
+            missingComponents.append(" - Wiring is required\n");
+        }
+
+        if (missingComponents.length() > 0) {
+            System.out.println("Missing or insufficient components:\n" + missingComponents);
             return false;
         }
-        if(game.isHasKeyboard() && keyboard == null){
-            return false;
-        }
-        if(game.isHasMouse() && mouse == null){
-            return false;
-        }
-         if(game.isHasWiring() && wiring == null){
-            return false;
-         }
         return true;
-
-
     }
+
     private boolean isBetterOrEqual(Part currentPart, Part requiredPart) {
          if (currentPart instanceof CPU && requiredPart instanceof CPU) {
             CPU currentCPU = (CPU) currentPart;
