@@ -1,22 +1,15 @@
 package shop;
 
-// Order.java
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Represents an order in the store's system.
- * An order can be placed with a supplier or by a customer.
- */
 public class Order {
-    // Attributes
     private String orderId;
-    private String orderType; // "Supplier" for store purchasing parts, "Customer" for customer purchases
+    private String orderType;
     private List<Part> orderedParts;
     private double totalCost;
-    private int daysToArrival; // Simulates order arrival time
+    private int daysToArrival;
 
-    // No-arg constructor
     public Order() {
         this.orderId = generateOrderId();
         this.orderType = "Unknown";
@@ -25,7 +18,6 @@ public class Order {
         this.daysToArrival = 0;
     }
 
-    // Multi-arg constructor
     public Order(String orderType, List<Part> orderedParts, int daysToArrival) {
         this.orderId = generateOrderId();
         this.orderType = orderType;
@@ -34,7 +26,6 @@ public class Order {
         this.daysToArrival = daysToArrival;
     }
 
-    // Getters and Setters
     public String getOrderId() {
         return orderId;
     }
@@ -53,7 +44,7 @@ public class Order {
 
     public void setOrderedParts(List<Part> orderedParts) {
         this.orderedParts = orderedParts;
-        this.totalCost = calculateTotalCost(orderedParts); // Recalculate cost when parts are set
+        this.totalCost = calculateTotalCost(orderedParts);
     }
 
     public double getTotalCost() {
@@ -68,37 +59,20 @@ public class Order {
         this.daysToArrival = daysToArrival;
     }
 
-    // Additional Beneficial Methods
-    /**
-     * Simulates the passing of one day and decreases the days to arrival.
-     */
     public void passDay() {
         if (daysToArrival > 0) {
             daysToArrival--;
         }
     }
 
-    /**
-     * Checks if the order has arrived.
-     * @return true if the order has arrived, false otherwise.
-     */
     public boolean hasArrived() {
         return daysToArrival == 0;
     }
 
-    /**
-     * Generates a random order ID for tracking purposes.
-     * @return A unique order ID.
-     */
     private String generateOrderId() {
         return "ORD-" + (int) (Math.random() * 100000);
     }
 
-    /**
-     * Calculates the total cost of the order based on its parts.
-     * @param parts The parts included in the order.
-     * @return Total cost of the order.
-     */
     private double calculateTotalCost(List<Part> parts) {
         double total = 0.0;
         for (Part part : parts) {
