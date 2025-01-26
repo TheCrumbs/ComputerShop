@@ -13,7 +13,7 @@ public class Monitor extends Part {
         this.brand = brand;
         this.size = size;
         this.refreshRate = refreshRate;
-         this.resolution = resolution;
+        this.resolution = resolution;
     }
 
     public String getBrand() {
@@ -27,48 +27,45 @@ public class Monitor extends Part {
     public int getRefreshRate() {
         return refreshRate;
     }
-    
-     public String getResolution() {
+
+    public String getResolution() {
         return resolution;
     }
 
-
-      @Override
-        public double calculateResaleValue() {
-         double baseResaleValue = super.calculateResaleValue();
-          double qualityMultiplier = 1.0;
-             switch (getQuality()) {
+    @Override
+    public double calculateResaleValue() {
+        double baseResaleValue = super.calculateResaleValue();
+        double qualityMultiplier = 1.0;
+        
+        switch (getQuality()) {
             case QUALITY_FACTORY_NEW:
-                 qualityMultiplier = 1.2;
-                 break;
-             case QUALITY_SLIGHTLY_DAMAGED:
+                qualityMultiplier = 1.2;
+                break;
+            case QUALITY_SLIGHTLY_DAMAGED:
                 qualityMultiplier = 0.8;
-                 break;
+                break;
             case QUALITY_DAMAGED:
                 qualityMultiplier = 0.6;
                 break;
-             case QUALITY_VERY_DAMAGED:
+            case QUALITY_VERY_DAMAGED:
                 qualityMultiplier = 0.4;
-                 break;
-          }
-
+                break;
+        }
 
         double sizePerformance = (double) size / 35;
-       double refreshRatePerformance =  (double) refreshRate / 144.0;
+        double refreshRatePerformance = (double) refreshRate / 144.0;
 
-
-
-     return baseResaleValue * qualityMultiplier + baseResaleValue * (sizePerformance + refreshRatePerformance);
-
-
+        return baseResaleValue * qualityMultiplier 
+             + baseResaleValue * (sizePerformance + refreshRatePerformance);
     }
+
     @Override
     public String toString() {
         return "Monitor{" +
                 "brand='" + brand + '\'' +
                 ", size=" + size +
                 ", refreshRate=" + refreshRate +
-                 ", resolution=" + resolution +
+                ", resolution='" + resolution + '\'' +
                 "} " + super.toString();
     }
 }
