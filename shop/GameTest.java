@@ -16,9 +16,9 @@ public class GameTest {
     private static final char BALL_CHAR = 'O';
     private static final char EMPTY_CHAR = ' ';
     private static List<Game> gameList;
-     private static int ballCollideY = -1; //store a y value where ball last collided
+    private static int ballCollideY = -1; //store a y value where ball last collided
     private static int ballCollideX = -1; // store the x value where the ball last collided
-       private static boolean collisionFrame = false;
+    private static boolean collisionFrame = false;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -129,26 +129,28 @@ public class GameTest {
     private static List<Game> generateGameList() {
         List<Game> gameList = new ArrayList<>();
 
-        //Example parts
-        CPU cpu1 = new CPU(Part.QUALITY_FACTORY_NEW, 100.0, 50.0, "Intel", "i5 12600k", 12, 6, 3.8, 16);
-        GPU gpu1 = new GPU(Part.QUALITY_FACTORY_NEW, 200.0, 100.0, "Nvidia", "RTX 2060", 6, 1.5);
-        RAM ram1 = new RAM(Part.QUALITY_FACTORY_NEW, 80.0, 40.0, "Corsair", 1, 3200, "DDR4");
-        Motherboard mb1 = new Motherboard(Part.QUALITY_FACTORY_NEW, 150.0, 75.0, "MSI", "LGA 1700", "ATX", 4, "Z790", "PCIe 5.0");
-        SSD ssd1 = new SSD(Part.QUALITY_FACTORY_NEW, 90.0, 45.0, "Samsung", 500, "NVMe", 3500, 3000);
-        HDD hdd1 = new HDD(Part.QUALITY_FACTORY_NEW, 70.0, 35.0, "Seagate", 1000, 7200, "HDD");
+        // Realistic requirements for Pong
+        CPU pongCPU = new CPU(Part.QUALITY_FACTORY_NEW, 80.0, 40.0, 
+            "Intel", "i3 10100", 10, 4, 3.6, 6);
+        GPU pongGPU = new GPU(Part.QUALITY_FACTORY_NEW, 100.0, 50.0,
+            "Nvidia", "GTX 1050", 2, 1.4);
+        RAM pongRAM = new RAM(Part.QUALITY_FACTORY_NEW, 40.0, 20.0,
+            "Corsair", 8, 2666, "DDR4");
+        Motherboard pongMB = new Motherboard(Part.QUALITY_FACTORY_NEW, 80.0, 40.0,
+            "ASUS", "LGA 1200", "Micro-ATX", 2, "H410", "PCIe 3.0");
 
-        CPU cpu2 = new CPU(Part.QUALITY_FACTORY_NEW, 200.0, 100.0, "Intel", "i7 13700k", 13, 16, 3.4, 30);
-        GPU gpu2 = new GPU(Part.QUALITY_FACTORY_NEW, 400.0, 200.0, "Nvidia", "RTX 3060", 8, 1.8);
-        RAM ram2 = new RAM(Part.QUALITY_FACTORY_NEW, 160.0, 80.0, "Corsair", 32, 3600, "DDR5");
-        Motherboard mb2 = new Motherboard(Part.QUALITY_FACTORY_NEW, 200.0, 100.0, "MSI", "AM5", "ATX", 4, "B650", "PCIe 5.0");
-        SSD ssd2 = new SSD(Part.QUALITY_FACTORY_NEW, 150.0, 75.0, "Samsung", 1000, "NVMe", 4000, 3500);
-        HDD hdd2 = new HDD(Part.QUALITY_FACTORY_NEW, 90.0, 45.0, "Seagate", 2000, 7200, "HDD");
+        // More demanding game
+        CPU highEndCPU = new CPU(Part.QUALITY_FACTORY_NEW, 300.0, 150.0,
+            "Intel", "i9 13900K", 13, 24, 5.8, 36);
+        GPU highEndGPU = new GPU(Part.QUALITY_FACTORY_NEW, 800.0, 400.0,
+            "Nvidia", "RTX 4090", 24, 2.23);
 
-
-        //Example Games
-        gameList.add(new Game("Pong", cpu1, gpu1, ram1, mb1, null, null, true, true, true, true));
-        gameList.add(new Game("Blackjack", cpu2, gpu2, ram2, mb2, ssd2, null, true, true, true, true));
-
+        gameList.add(new Game("Pong", pongCPU, pongGPU, pongRAM, pongMB, null, null, true, true, true, true));
+        gameList.add(new Game("Cyberpunk 2077", highEndCPU, highEndGPU, 
+            new RAM(Part.QUALITY_FACTORY_NEW, 160.0, 80.0, "Corsair", 32, 6000, "DDR5"),
+            new Motherboard(Part.QUALITY_FACTORY_NEW, 300.0, 150.0, "MSI", "LGA 1700", "ATX", 4, "Z790", "PCIe 5.0"),
+            new SSD(Part.QUALITY_FACTORY_NEW, 150.0, 75.0, "Samsung", 1000, "NVMe", 7000, 6000),
+            null, true, true, true, true));
 
         return gameList;
     }
@@ -162,31 +164,42 @@ public class GameTest {
 
     }
 
+    private static void viewUnlockedGames(Store store) {
+	    System.out.println("\n--- Unlocked Games ---");
+	    List<Game> unlocked = store.getUnlockedGames();
+	    if (unlocked.isEmpty()) {
+	        System.out.println("No games unlocked yet!");
+	        return;
+	    }
+	    for (int i = 0; i < unlocked.size(); i++) {
+	        System.out.println("  " + (i + 1) + ". " + unlocked.get(i).getName());
+	    }
+	}
+
     private static void buildComputer(Store store, Scanner scanner) {
-        Computer pc = new Computer();
-        List<Part> partsForPC = pc.getParts(); //Get List of the PC parts to pass it on.
-        while (true) {
-            System.out.println("\n--- Building PC ---");
-            if (store.getStorage().isEmpty()) {
-                System.out.println("No parts to put in computer!");
-                return;
-            }
-            for (int i = 0; i < store.getStorage().size(); i++) {
-                Part part = store.getStorage().get(i);
-                System.out.println("  " + (i + 1) + ". " + part.getName() + " (" + part.getQuality() + "), Price: $" + String.format("%.2f", part.getPrice()));
-            }
-            System.out.println("1. Add item to PC");
-            if (!partsForPC.isEmpty()) {
-                System.out.println("2. Remove item from PC");
-            }
-
-            System.out.println("3. Check PC Build and Requirements");
-            System.out.println("4. Back to main menu");
-            System.out.print("Enter your choice: ");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            switch (choice) {
+	    Computer pc = new Computer();
+	    List<Part> partsForPC = pc.getParts();
+	    while (true) {
+	        System.out.println("\n--- Building PC ---");
+	        if (store.getStorage().isEmpty()) {
+	            System.out.println("No parts to put in computer!");
+	            return;
+	        }
+	        for (int i = 0; i < store.getStorage().size(); i++) {
+	            Part part = store.getStorage().get(i);
+	            System.out.println("  " + (i + 1) + ". " + part.getName() + " (" + part.getQuality() + "), Price: $" + String.format("%.2f", part.getPrice()));
+	        }
+	        System.out.println("1. Add item to PC");
+	        if (!partsForPC.isEmpty()) {
+	            System.out.println("2. Remove item from PC");
+	        }
+	        System.out.println("3. Check PC Build and Requirements");
+	        System.out.println("4. Back to main menu");
+	        System.out.print("Enter your choice: ");
+	
+	        int choice = scanner.nextInt();
+	        scanner.nextLine();
+	        switch (choice) {
                 case 1:
                     System.out.print("Enter the number of the item you wish to put in the computer: ");
                     int storageItemNumber = scanner.nextInt();
@@ -282,42 +295,53 @@ public class GameTest {
 
                 case 3:
                     if (partsForPC.isEmpty()) {
-                        System.out.println("No parts in the PC!");
-                        break;
-                    }
-
-                    System.out.println(pc.toString());
-                    System.out.println("Which game do you want to check system requirements for?: ");
-                    viewAvailableGames();
-                    int selectedGame = scanner.nextInt();
-                    scanner.nextLine();
-
-                    if (selectedGame > 0 && selectedGame <= gameList.size()) {
-                        Game gameToCheck = gameList.get(selectedGame - 1);
-
-                        if (pc.meetsGameRequirements(gameToCheck)) {
-                            System.out.println("Your PC meets the requirements for " + gameToCheck.getName() + "! You can now play this game!");
-                            if (gameToCheck.getName().equals("Pong")) {
-                                playPongGame(scanner);
-                            }
-                            break;
-
-                        } else {
-                            System.out.println("Your PC does not meet the requirements for " + gameToCheck.getName() + "! Check the requirements again and see what parts you need to upgrade to play this game!");
-                        }
-                    } else {
-                        System.out.println("Invalid game number!");
-                    }
-
-                    break;
-                case 4:
-                    return;
-                default:
-                    System.out.println("Invalid choice, please try again!");
-            }
-        }
-    }
-
+	                    System.out.println("No parts in the PC!");
+	                    break;
+	                }
+	
+	                System.out.println(pc.toString());
+	                System.out.println("Which game do you want to check system requirements for?: ");
+	                viewAvailableGames();
+	                int selectedGame = scanner.nextInt();
+	                scanner.nextLine();
+	
+	                if (selectedGame > 0 && selectedGame <= gameList.size()) {
+	                    Game gameToCheck = gameList.get(selectedGame - 1);
+	
+	                    if (pc.meetsGameRequirements(gameToCheck)) {
+	                        store.unlockGame(gameToCheck);
+	                        System.out.println("Your PC can run " + gameToCheck.getName() + "!");
+	                        
+	                        // Offer to play unlocked game
+	                        System.out.print("Would you like to play it now? (y/n): ");
+	                        String playChoice = scanner.nextLine();
+	                        if (playChoice.equalsIgnoreCase("y")) {
+	                            switch (gameToCheck.getName().toLowerCase()) {
+	                                case "pong":
+	                                    playPongGame(scanner);
+	                                    break;
+	                                case "blackjack":
+	                                    BlackJackGame(scanner);
+	                                    break;
+	                                default:
+	                                    System.out.println("Game launch not implemented yet!");
+	                            }
+	                        }
+	                    } else {
+	                        System.out.println("Your PC does not meet the requirements for " + gameToCheck.getName() + "!");
+	                    }
+	                } else {
+	                    System.out.println("Invalid game number!");
+	                }
+	                break;
+	            case 4:
+	                return;
+	            default:
+	                System.out.println("Invalid choice, please try again!");
+	        }
+	    }
+	}
+	
     private static void playPongGame(Scanner scanner) {
         System.out.println("\nSelect AI Difficulty:");
         System.out.println("1. Stupid");
@@ -335,9 +359,9 @@ public class GameTest {
         int ballDirY = 1; // 1 for down, -1 for up
         int score1 = 0; // Left Player Score
         int score2 = 0; // Right Player Score
-          ballCollideX = -1;
-         ballCollideY = -1;
-           collisionFrame = false;
+        ballCollideX = -1;
+        ballCollideY = -1;
+        collisionFrame = false;
 
         while (true) {
              //Clear Screen
@@ -484,54 +508,54 @@ public class GameTest {
     }
     
     
-     private static void BlackJackGame(Scanner scanner){
-    	 Deck deck = new Deck();
-	        Player player = new Player();
-	        Player dealer = new Player();
+    private static void BlackJackGame(Scanner scanner){
+    	Deck deck = new Deck();
+		Player player = new Player();
+		Player dealer = new Player();
 
-	        player.addCard(deck.dealCard());
-	        dealer.addCard(deck.dealCard());
-	        player.addCard(deck.dealCard());
-	        dealer.addCard(deck.dealCard());
+		player.addCard(deck.dealCard());
+		dealer.addCard(deck.dealCard());
+		player.addCard(deck.dealCard());
+		dealer.addCard(deck.dealCard());
 
-	        System.out.println("Your hand: " + player.getHand());
-	        System.out.println("Dealer's hand: " + dealer.getHand().get(0) + " and [hidden]");
+		System.out.println("Your hand: " + player.getHand());
+		System.out.println("Dealer's hand: " + dealer.getHand().get(0) + " and [hidden]");
 
-	        while (true) {
-	            System.out.println("Your hand value: " + player.calculateHandValue());
-	            System.out.println("Do you want to (1) Hit or (2) Stand?");
-	            int choice = scanner.nextInt();
-	            if (choice == 1) {
-	                player.addCard(deck.dealCard());
-	                System.out.println("Your hand: " + player.getHand());
-	                if (player.calculateHandValue() > 21) {
-	                    System.out.println("You bust! Dealer wins.");
-	                    return;
-	                }
-	            } else {
-	                break;
-	            }
-	        }
+		while (true) {
+			System.out.println("Your hand value: " + player.calculateHandValue());
+			System.out.println("Do you want to (1) Hit or (2) Stand?");
+			int choice = scanner.nextInt();
+			if (choice == 1) {
+				player.addCard(deck.dealCard());
+				System.out.println("Your hand: " + player.getHand());
+				if (player.calculateHandValue() > 21) {
+					System.out.println("You bust! Dealer wins.");
+					return;
+				}
+			} else {
+				break;
+			}
+		}
 
-	        System.out.println("Dealer's hand: " + dealer.getHand());
-	        while (dealer.calculateHandValue() < 17) {
-	            dealer.addCard(deck.dealCard());
-	            System.out.println("Dealer's hand: " + dealer.getHand());
-	        }
+		System.out.println("Dealer's hand: " + dealer.getHand());
+		while (dealer.calculateHandValue() < 17) {
+			dealer.addCard(deck.dealCard());
+			System.out.println("Dealer's hand: " + dealer.getHand());
+		}
 
-	        int playerValue = player.calculateHandValue();
-	        int dealerValue = dealer.calculateHandValue();
-	        System.out.println("Your hand value: " + playerValue);
-	        System.out.println("Dealer's hand value: " + dealerValue);
+		int playerValue = player.calculateHandValue();
+		int dealerValue = dealer.calculateHandValue();
+		System.out.println("Your hand value: " + playerValue);
+		System.out.println("Dealer's hand value: " + dealerValue);
 
-	        if (dealerValue > 21 || playerValue > dealerValue) {
-	            System.out.println("You win!");
-	        } else if (playerValue < dealerValue) {
-	            System.out.println("Dealer wins!");
-	        } else {
-	            System.out.println("It's a tie!");
-	        }
-	    }
+		if (dealerValue > 21 || playerValue > dealerValue) {
+			System.out.println("You win!");
+		} else if (playerValue < dealerValue) {
+			System.out.println("Dealer wins!");
+		} else {
+			System.out.println("It's a tie!");
+		}
+	}
     
     
     
